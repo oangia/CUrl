@@ -42,9 +42,10 @@ class CUrl {
 
 	public function reset() {
 		$this->mobile = false;
+		$this->json_data = false;
+		$this->userAgent = '';
 		$this->resetOpts();
 		$this->resetHeaders();
-		$this->userAgent = '';
 	}
 
 	public function json_data() {
@@ -58,7 +59,7 @@ class CUrl {
 	public function json() {
 		$this->headers[] = 'Accept: application/json; charset=utf-8';
 		if ( $this->json_data ) {
-			$this->headers[] = 'Content-Type: appplication/json; charset=utf-8';
+			$this->headers[] = 'Content-Type: application/json; charset=utf-8';
 		} else {
 			$this->headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=utf-8';
 		}
@@ -87,6 +88,8 @@ class CUrl {
 
 		$this->detectSSL( $url );
 
+		$this->setHeaders();
+
 		$this->setOptions();
 
 		if ( $data ) {
@@ -113,8 +116,6 @@ class CUrl {
 				curl_setopt( $this->curl, CURLOPT_POSTFIELDS, $data );
 				break;
 		}
-
-		$this->setHeaders();
 
 		$response = curl_exec( $this->curl );
 
