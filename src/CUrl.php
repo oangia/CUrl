@@ -82,6 +82,7 @@ class CUrl {
 	{
 		$this->curl = curl_init();
 
+		curl_setopt( $this->curl, CURLOPT_TIMEOUT, 30);
 		curl_setopt( $this->curl, CURLOPT_URL, $url );
 
 		$this->userAgent();
