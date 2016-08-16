@@ -7,6 +7,7 @@ class CUrl {
 	private $headers = [];
 	private $options = [];
 	private $mobile = false;
+	private $json_data = false;
 	private $userAgent = '';
 	private $UA = [
 		'browser' => [
@@ -46,13 +47,22 @@ class CUrl {
 		$this->userAgent = '';
 	}
 
+	public function json_data() {
+		$this->json_data = true;
+	}
+
 	public function mobile() {
 		$this->mobile = true;
 	}
 
 	public function json() {
 		$this->headers[] = 'Accept: application/json; charset=utf-8';
-		$this->headers[] = 'Content-Type: appplication/json; charset=utf-8';
+		if ( $this->json_data ) {
+			$this->headers[] = 'Content-Type: appplication/json; charset=utf-8';
+		} else {
+			$this->headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=utf-8';
+		}
+		
 	}
 
 	public function setUserAgent( $userAgent ) {
@@ -79,20 +89,28 @@ class CUrl {
 
 		$this->setOptions();
 
+		if ( $data ) {
+			if ( $this->json_data ) {
+				$data = json_encode( $data );
+			} else {
+				$data = http_build_query( $data );
+			}
+		}
+
 		switch ( $method ) {
 			case 'GET':
 				break;
 			case 'POST':
 				curl_setopt( $this->curl, CURLOPT_POST, true );
-				curl_setopt( $this->curl, CURLOPT_POSTFIELDS, http_build_query( $data ) );
+				curl_setopt( $this->curl, CURLOPT_POSTFIELDS, $data );
 				break;
 			case 'PUT':
 				curl_setopt( $this->curl, CURLOPT_PUT, true );
-				curl_setopt( $this->curl, CURLOPT_POSTFIELDS, http_build_query( $data ) );
+				curl_setopt( $this->curl, CURLOPT_POSTFIELDS, $data );
 				break;
 			case 'DELETE':
 				curl_setopt( $this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-				curl_setopt( $this->curl, CURLOPT_POSTFIELDS, http_build_query( $data ) );
+				curl_setopt( $this->curl, CURLOPT_POSTFIELDS, $data );
 				break;
 		}
 
