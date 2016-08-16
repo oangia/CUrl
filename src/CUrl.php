@@ -91,7 +91,7 @@ class CUrl {
 
 		if ( $data ) {
 			if ( $this->json_data ) {
-				$data = json_encode( $data );
+				$data = json_encode( $data ); 
 			} else {
 				$data = http_build_query( $data );
 			}
