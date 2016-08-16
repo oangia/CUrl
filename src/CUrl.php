@@ -165,5 +165,5 @@ class CUrl {
 
 	private function resetHeaders() {
 		$this->headers = [];
-	}
+	} 
 }
