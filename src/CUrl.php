@@ -75,7 +75,7 @@ class CUrl {
 	}
 
 	public function setHeader( $header ) {
-		$this->options[] = $header;
+		$this->headers[] = $header;
 	}
 
 	public function connect( $method, $url, $data = null ) 
